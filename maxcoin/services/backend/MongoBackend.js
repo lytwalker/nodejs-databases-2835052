@@ -43,9 +43,12 @@ class MongoBackend {
         return this.collection.insertMany(documents);
     }
 
-    async getMax() {}
+    async getMax() {
+        return this.collection.findOne({}, { sort: { value: 1 } });
+    }
 
     async max() {
+        // Begin - Connect
         console.info("Connection to MongoDB");
         console.time("mongodb-connect");
         const client = await this.connect();
@@ -55,17 +58,36 @@ class MongoBackend {
             throw new Error("Connecting to MongoDB failed");
         }
         console.timeEnd("mongodb-connect");
+        // End - Connect
 
+        // Begin - Insert
         console.info("Inserting into MongoDB");
         console.time("mongodb-insert");
         const insertResult = await this.insert();
         console.timeEnd("mongodb-insert");
         console.info(`Inserted ${insertResult.result.n} documents into MongoDB.`);
+        // End - Insert
 
+        // Begin - Query - part 1
+        console.info("Querying MongoDB");
+        console.time("mongodb-findone");
+        const doc = await this.getMax();
+        console.timeEnd("mongodb-findone");
+        // End - Query - part 1
+
+        // Begin - Disconnect
         console.info("Disconnecting from MongoDB");
         console.time("mongodb-disconnect");
         await this.disconnect();
         console.timeEnd("mongodb-disconnect");
+        // End - Disconnect
+
+        // Begin - Query - part 2
+        return {
+            date: doc.date,
+            value: doc.value,
+        };
+        // End - Query - part 2
     }
 }
 
