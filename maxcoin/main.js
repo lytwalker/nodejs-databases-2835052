@@ -1,5 +1,6 @@
 const MongoBackend = require("./services/backend/MongoBackend");
 const RedisBackend = require("./services/backend/RedisBackend");
+const MySQLBackend = require("./services/backend/MySQLBackend");
 
 async function runMongo() {
     const mongoBackend = new MongoBackend();
@@ -11,13 +12,24 @@ async function runRedis() {
     return redisBackend.max();
 }
 
+async function runMySQL() {
+    const mySQLBackend = new MySQLBackend();
+    return mySQLBackend.max();
+}
+
 // runMongo()
 //     .then((result) => {
 //         console.log(result);
 //     })
 //     .catch((err) => console.error(err));
 
-runRedis()
+// runRedis()
+//     .then((result) => {
+//         console.log(result);
+//     })
+//     .catch((err) => console.error(err));
+
+runMySQL()
     .then((result) => {
         console.log(result);
     })

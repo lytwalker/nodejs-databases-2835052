@@ -3,6 +3,7 @@
 const http = require("http");
 const mongoose = require("mongoose");
 const Redis = require("ioredis");
+const Sequelize = require("sequelize");
 
 const config = require("../config");
 const App = require("../app");
@@ -31,8 +32,28 @@ function connectToRedis() {
     return redis;
 }
 
+/* Connect to MySQL */
+function connectToMySQL() {
+    const sequelize = new Sequelize(config.mysql.options);
+
+    sequelize
+        .authenticate()
+        .then(() => {
+            console.info("Successfully Connected to MySQL");
+        })
+        .catch((err) => {
+            console.error(err);
+            process.exit(1);
+        });
+
+    return sequelize;
+}
+
 const redis = connectToRedis();
 config.redis.client = redis; // Passing the just connected redis client object to the config file so all routes can access it.
+
+const mysql = connectToMySQL();
+config.mysql.client = mysql; // Passing the just connected mysql client
 
 /* Logic to start the application */
 const app = App(config);
