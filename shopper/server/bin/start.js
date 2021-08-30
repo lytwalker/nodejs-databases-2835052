@@ -96,6 +96,6 @@ connectToMongoose()
         console.log("Successfully Connected to MongoDB");
         server.listen(port);
     })
-    .catch((onError) => {
-        console.error(`Failed to Connect to MongoDB. Error ${onError}`);
+    .catch((error) => {
+        console.error(`Failed to Connect to MongoDB. Error ${error}`);
     });

@@ -2,9 +2,11 @@ const express = require("express");
 
 const BasketService = require("../../services/BasketService");
 const ItemService = require("../../services/ItemService");
+const OrderService = require("../../services/OrderService");
 
 module.exports = (config) => {
     const router = express.Router();
+    const order = new OrderService(config.mysql.client);
 
     router.get("/", async (req, res) => {
         if (!res.locals.currentUser) {
